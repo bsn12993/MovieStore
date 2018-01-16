@@ -1,0 +1,52 @@
+﻿@model MovieStore.Web.Models.Movie
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+ 
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+<link href="~/Content/bootstrap-datepicker.css" rel="stylesheet" />
+ 
+
+<h2>Create</h2>
+
+@using (Html.BeginForm("CreateMovie", "Movie", FormMethod.Post, new { id = "form_createMovie" })) 
+{
+    <div class="col-lg-12">
+        <div class="form-group">
+            @Html.DisplayNameFor(m=>m.Title)
+            @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Title, "Field Empty: ", new { @class = "alert alert-error" })
+        </div>
+        <div class="form-group">
+            @Html.DisplayNameFor(m => m.ReleaseDate)
+            @Html.TextBoxFor(m => m.ReleaseDate, new { @class = "form-control, datepicker" })
+            @Html.ValidationMessageFor(m => m.ReleaseDate, "Field Empty: ", new { @class = "alert alert-error" })
+        </div>
+        <div class="form-group">
+            @Html.DisplayNameFor(m => m.Director)
+            @Html.TextBoxFor(m => m.Director, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Director, "Field Empty: ", new { @class = "alert alert-error" })
+        </div>
+        <div class="form-group">
+           <input type="submit" value="Create" />
+        </div>
+    </div>
+}
+
+ 
+
+@section scripts{
+   <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+    <script>
+        $(function () {
+            $("#@Html.IdFor(m=>m.ReleaseDate)").datepicker({
+                format: 'yyyy/mm/dd',
+                startDate: '-3d'
+            });
+            $("#@Html.IdFor(m=>m.ReleaseDate)").val("");
+        });
+    </script> 
+}

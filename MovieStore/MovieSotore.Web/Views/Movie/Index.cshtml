@@ -1,0 +1,148 @@
+﻿@model List<MovieStore.Web.Models.Movie>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<div class="row">
+    <div class="col-lg-12">
+         <form id="form_search">
+             <label>Filter</label><br />
+             <input type="text" class="form-control" placeholder="Title" id="title" name="title" required onkeypress="return validateTitle(event)"/><br />
+             <span class="text-danger" id="message"></span>
+             <input type="button" value="Search" class="btn" id="btn_search" />
+         </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        @Html.ActionLink("Create Movie", "Create", null, new { @class = "form-control" })
+    </div>
+</div>
+
+<div class="row" id="tableResults">
+    <div class="col-lg-12">
+        <table class="">
+            <thead>
+                <tr>
+                    <td>Title</td>
+                    <td>Release Date</td>
+                    <td>Director</td>
+                    <td>Edit</td>
+                    <td>Delete</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Title</td>
+                        <td>@item.ReleaseDate.ToShortDateString()</td>
+                        <td>@item.Director</td>
+                        <td>@Html.ActionLink("Edit","Edit",new { id=@item.Id, title=@item.Title, releaseDate=@item.ReleaseDate, director=@item.Director})</td>
+                        <td>@Html.ActionLink("Delete", "DeleteMovie", new { id = @item.Id })</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+
+            $("#btn_search").on("click", function (evt) {
+                debugger;
+                evt.preventDefault();
+                if ($("#title").val() != "" && $("#title").val() != undefined) {
+                    var title = {
+                        title: ($("#title").val()!="" && $("#title").val()!=undefined)?$("#title").val():""
+                    }
+                    $.ajax({
+                        url: "/Movie/SearchMovie",
+                        contentType: "application/json",
+                        method: "GET",
+                        data: title,
+                        success: function (data) {
+                            console.log(data);
+                            $("#tableResults").html("");
+                            $("#tableResults").html(data);
+                        },
+                        error: function (x, y, z) {
+                            alert(x);
+                        }
+                    });
+                } else {
+                    $("#message").html("El valor del titulo no es valido")
+                }
+             
+            });
+
+            $("#btn_edit").on('click', function (evt) {
+                var data = {
+                    Id: ($("#btn_edit").data("id") != "" && $("#btn_edit").data("id") != undefined) ? $("#btn_edit").data("id") : 0,
+                    Title: ($("#btn_edit").data("title") != "" && $("#btn_edit").data("title") != undefined) ? $("#btn_edit").data("title") : '',
+                    ReleaseDate: ($("#btn_edit").data("title") != "" && $("#btn_edit").data("title") != undefined) ? $("#btn_edit").data("title") : '',
+                    Director: ($("#btn_edit").data("title") != "" && $("#btn_edit").data("title") != undefined) ? $("#btn_edit").data("title") : ''
+                }
+                $.ajax({
+                    url: "/Movie/EditMovie",
+                    contentType: "application/json",
+                    method: "POST",
+                    data: data,
+                    success: function (data) {
+                        console.log(data);
+                        $("#tableResults").html("");
+                        $("#tableResults").html(data);
+                    },
+                    error: function (x, y, z) {
+                        alert(x);
+                    }
+                });
+            });
+
+            $("#btn_delete").on('click', function (evt) {
+                var data = {
+                    Id: ($("#btn_delete").data("id") != "" && $("#btn_delete").data("id") != undefined) ? $("#btn_delete").data("id") : 0
+                }
+                $.ajax({
+                    url: "/Movie/DeleteMovie",
+                    contentType: "application/json",
+                    method: "GET",
+                    data: data,
+                    success: function (data) {
+                        console.log(data);
+                        $("#tableResults").html("");
+                        $("#tableResults").html(data);
+                    },
+                    error: function (x, y, z) {
+                        alert(x);
+                    }
+                });
+
+            });
+
+            function validateTitle(e) {
+                key = e.keyCode || e.whitch;
+                tecla = String.fromCharCode(key).toString();
+                cadena = " áéíóúabcdefghijklmnñopqrstuvwxyzÁÉÍÓÚABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+                especiales = [8, 37, 39, 46, 6];
+                tecla_especial = false;
+                for (var i in especiales) {
+                    if (key == especiales[i]) {
+                        tecla_especial = true;
+                        break;
+                    }
+                }
+                if (cadena.indexOf(tecla) == -1 && !tecla_especial) {
+                    return false;
+                }
+            }
+        })
+    </script>    
+}
+ 

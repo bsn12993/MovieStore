@@ -1,0 +1,52 @@
+﻿@model MovieStore.Web.Models.Movie
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Model != null)
+{
+    <div>
+        <h4>@MovieStore.Web.Resources.Etiquetas.app_tagMovie_Movie</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayName(MovieStore.Web.Resources.Etiquetas.app_movie_title)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Title)
+            </dd>
+
+            <dt>
+                @Html.DisplayName(MovieStore.Web.Resources.Etiquetas.app_movie_releaseDate)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ReleaseDate)
+            </dd>
+
+            <dt>
+                @Html.DisplayName(MovieStore.Web.Resources.Etiquetas.app_movie_director)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Director)
+            </dd>
+
+        </dl>
+    </div>
+    <p>
+        @*@Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |*@
+        @Html.ActionLink(@MovieStore.Web.Resources.Etiquetas.app_movie_buttonName_ReturnBack, "Index")
+    </p>
+}
+else
+{
+    <div class="row">
+        <h3 class="alert-danger">@ViewBag.resultado</h3>
+    </div>
+
+    @Html.ActionLink(@MovieStore.Web.Resources.Etiquetas.app_movie_buttonName_ReturnBack, "Index")
+}

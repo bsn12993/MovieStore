@@ -1,0 +1,29 @@
+﻿@model MovieStore.Web.Models.Movie
+
+@if(Model != null)
+{
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="alert-success">
+                @Html.DisplayName("Title: ")
+                @Html.DisplayTextFor(m => m.Title)
+            </div>
+            <br />
+            <div class="alert-success">
+                @Html.DisplayName("ReleaseDate: ")
+                @Html.DisplayTextFor(m => m.ReleaseDate)
+            </div>
+            <br />
+            <div class="alert-success">
+                @Html.DisplayName("Director: ")
+                @Html.DisplayTextFor(m => m.Director)
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        <h3 class="alert-danger">No se encontraron resultados</h3>
+    </div>
+}
